@@ -24,11 +24,13 @@ describe("App component", () => {
   });
 
   it("should be able to add new item to the list", () => {
-    const { getByText } = render(<App />);
+    const { getByText, debug } = render(<App />);
 
     const addButton = getByText("Adicionar");
 
     // userEvent.click(addButton); // deprecated code v13
+
+    debug();
 
     // current correct code - v14
     fireEvent(
@@ -38,6 +40,8 @@ describe("App component", () => {
         cancelable: true,
       })
     );
+
+    debug();
 
     expect(getByText("Novo")).toBeInTheDocument();
   });
