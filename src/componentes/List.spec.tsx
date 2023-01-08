@@ -5,32 +5,40 @@ import {
   waitForElementToBeRemoved,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import App from "./App";
+import App from "../App";
+import List from "./List";
 
 // test("Hello World is Truly", () => {
-//   const { getByText } = render(<App />);
+//   const { getByText } = render(<List initialItems={["Diego", "Rodz", "Mayk"]} />);
 
 //   expect(getByText("Hello World")).toBeTruthy();
 // });
 
 // test("HasClassName - Test", () => {
-//   const { getByText } = render(<App />);
+//   const { getByText } = render(<List initialItems={["Diego", "Rodz", "Mayk"]} />);
 
 //   expect(getByText("Hello World")).toHaveAttribute("class", "test");
 // });
 
-describe("App component", () => {
-  it("should render list items", () => {
-    const { getByText } = render(<App />);
+describe("List component", () => {
+  it("should render list items", async () => {
+    const { getByText, rerender, queryByText } = render(
+      <List initialItems={["Diego", "Rodz", "Mayk"]} />
+    );
 
     expect(getByText("Diego")).toBeInTheDocument();
     expect(getByText("Rodz")).toBeInTheDocument();
     expect(getByText("Mayk")).toBeInTheDocument();
+
+    rerender(<List initialItems={["Julia"]} />);
+
+    expect(getByText("Julia")).toBeInTheDocument();
+    expect(queryByText("Mayk")).not.toBeInTheDocument();
   });
 
   it("should be able to add new item to the list", async () => {
     const { getByText, findByText, getByPlaceholderText, debug } = render(
-      <App />
+      <List initialItems={[]} />
     );
 
     const inputElement = getByPlaceholderText("Novo item");
@@ -60,7 +68,9 @@ describe("App component", () => {
   });
 
   it("should be able to remove item to the list", async () => {
-    const { getByText, getAllByText, queryByText } = render(<App />);
+    const { getByText, getAllByText, queryByText } = render(
+      <List initialItems={["Diego"]} />
+    );
 
     const addButton = getByText("Adicionar");
     const removeButtons = getAllByText("Delete");
