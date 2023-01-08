@@ -2,6 +2,7 @@ import {
   render,
   fireEvent,
   getByPlaceholderText,
+  waitFor,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
@@ -27,8 +28,10 @@ describe("App component", () => {
     expect(getByText("Mayk")).toBeInTheDocument();
   });
 
-  it("should be able to add new item to the list", () => {
-    const { getByText, getByPlaceholderText, debug } = render(<App />);
+  it("should be able to add new item to the list", async () => {
+    const { getByText, findByText, getByPlaceholderText, debug } = render(
+      <App />
+    );
 
     const inputElement = getByPlaceholderText("Novo item");
     const addButton = getByText("Adicionar");
@@ -44,6 +47,15 @@ describe("App component", () => {
 
     debug();
 
-    expect(getByText("Novo")).toBeInTheDocument();
+    // sync tests
+    // expect(getByText("Novo")).toBeInTheDocument();
+
+    // async tests
+    // expect(await findByText("Novo")).toBeInTheDocument();
+
+    // alternative async tests
+    await waitFor(() => {
+      expect(getByText("Novo")).toBeInTheDocument();
+    });
   });
 });
