@@ -10,6 +10,12 @@ function App() {
     }, 500);
   }
 
+  function removeFromList(item: string) {
+    setTimeout(() => {
+      setList((state) => state.filter((item) => item !== item));
+    }, 500);
+  }
+
   return (
     <>
       <input
@@ -21,7 +27,10 @@ function App() {
 
       <ul>
         {list.map((item) => (
-          <li key={item}>{item}</li>
+          <li key={item}>
+            {item}
+            <button onClick={() => removeFromList(item)}>Delete</button>
+          </li>
         ))}
       </ul>
     </>

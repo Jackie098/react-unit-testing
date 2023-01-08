@@ -1,8 +1,8 @@
 import {
   render,
   fireEvent,
-  getByPlaceholderText,
   waitFor,
+  waitForElementToBeRemoved,
 } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
@@ -57,5 +57,26 @@ describe("App component", () => {
     await waitFor(() => {
       expect(getByText("Novo")).toBeInTheDocument();
     });
+  });
+
+  it("should be able to remove item to the list", async () => {
+    const { getByText, getAllByText, queryByText } = render(<App />);
+
+    const addButton = getByText("Adicionar");
+    const removeButtons = getAllByText("Delete");
+
+    fireEvent.click(removeButtons[0]);
+
+    // await waitForElementToBeRemoved(() => {
+    //   return getByText("Diego");
+    // });
+
+    // alternative remove
+    await waitFor(
+      () => {
+        expect(queryByText("Diego")).not.toBeInTheDocument();
+      },
+      { interval: 500 }
+    );
   });
 });
