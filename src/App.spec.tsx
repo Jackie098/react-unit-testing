@@ -1,4 +1,8 @@
-import { render, fireEvent } from "@testing-library/react";
+import {
+  render,
+  fireEvent,
+  getByPlaceholderText,
+} from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
 import App from "./App";
 
@@ -24,22 +28,19 @@ describe("App component", () => {
   });
 
   it("should be able to add new item to the list", () => {
-    const { getByText, debug } = render(<App />);
+    const { getByText, getByPlaceholderText, debug } = render(<App />);
 
+    const inputElement = getByPlaceholderText("Novo item");
     const addButton = getByText("Adicionar");
 
     // userEvent.click(addButton); // deprecated code v13
 
     debug();
 
+    fireEvent.change(inputElement, { target: { value: "Novo" } });
+
     // current correct code - v14
-    fireEvent(
-      addButton,
-      new MouseEvent("click", {
-        bubbles: true,
-        cancelable: true,
-      })
-    );
+    fireEvent.click(addButton);
 
     debug();
 
